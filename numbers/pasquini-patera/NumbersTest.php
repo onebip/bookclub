@@ -20,6 +20,14 @@ class NumbersTest extends PHPUnit_Framework_TestCase
 
 class NumberTranslate
 {
+    private $mapSingle = [
+        '1' => 'uno',
+        '9' => 'nove',
+    ];
+    
+    private $mapDouble = [
+        '90' => 'novanta'
+    ];
 
     public function __construct($number)
     {
@@ -28,9 +36,20 @@ class NumberTranslate
 
     public function numberToLetter()
     {
-        if ($this->number > 1)
-        return 'novantanove';
+        return $this->translate();
+    }
 
-        return 'uno';
+    private function translate()
+    {
+        $numberOfChar = strlen($this->number);
+        if ($numberOfChar == 2) {
+            $key1 = substr($this->number,0,1).'0';
+            $key2 = substr($this->number,1,2);
+            return $this->mapDouble[$key1].$this->mapSingle[$key2];
+        }
+
+        if ($numberOfChar == 1) {
+            return $this->mapSingle[$this->number];
+        }
     }
 }
