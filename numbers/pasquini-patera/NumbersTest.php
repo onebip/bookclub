@@ -54,22 +54,36 @@ class NumberTranslate
         return substr($this->number,$position,1);
     }
 
+    private function finalResponse(array $values)
+    {
+        $result = '';
+        foreach($values as $value)
+        {
+            $result .= $value;
+        }
+        return $result;
+    }
+
     private function translate()
     {
         switch(strlen($this->number)) {
         case 2:
             $key1 = $this->giveMeCharAt(0).'0';
             $key2 = $this->giveMeCharAt(1);
-            return $this->mapDouble[$key1].$this->mapSingle[$key2];
+            return $this->finalResponse([
+                $this->mapDouble[$key1],
+                $this->mapSingle[$key2]
+            ]);
             break;
         case 3:
             $key1 = $this->giveMeCharAt(0);
             $key2 = $this->giveMeCharAt(1);
             $key3 = $this->giveMeCharAt(2);
-            $value1 = $this->mapSingle[$key1];
-            $value2 = $this->mapDouble[$key2];
-            $value3 = $this->mapSingle[$key3];
-            return $value1.$value2.$value3;
+            return $this->finalResponse([
+                $this->mapSingle[$key1],
+                $this->mapDouble[$key2],
+                $this->mapSingle[$key3]
+            ]);
             break;
         default:
             return $this->mapSingle[$this->number];
