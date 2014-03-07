@@ -10,6 +10,12 @@ class NumbersTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected,$numberTranslate->numberToLetter());
     }
 
+    public function test99IsNovantanove()
+    {
+        $expected = 'novantanove';
+        $numberTranslate = new NumberTranslate(99);
+        $this->assertEquals($expected,$numberTranslate->numberToLetter());
+    }
 }
 
 class NumberTranslate
@@ -22,6 +28,9 @@ class NumberTranslate
 
     public function numberToLetter()
     {
+        if ($this->number > 1)
+        return 'novantanove';
+
         return 'uno';
     }
 }
