@@ -1,0 +1,10 @@
+<phpunit bootstrap="bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite>
+            <directory suffix=".php">spec</directory>
+        </testsuite>
+        <testsuite name="unit">
+            <directory suffix=".php">spec/unit</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
