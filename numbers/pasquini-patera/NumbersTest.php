@@ -17,6 +17,13 @@ class NumbersTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected,$numberTranslate->numberToLetter());
     }
 
+    public function test23IsVentitre()
+    {
+        $expected = 'ventitre';
+        $numberTranslate = new NumberTranslate(23);
+        $this->assertEquals($expected,$numberTranslate->numberToLetter());
+    }
+
     public function test300IsTrecento()
     {
         $expected = 'trecento';
@@ -35,8 +42,9 @@ class NumberTranslate
     ];
     private $cento = 'cento';
     private $mapDouble = [
+        '0' => 'cento',
+        '20' => 'venti',
         '90' => 'novanta',
-        '0' => 'cento'
     ];
 
     public function __construct($number)
