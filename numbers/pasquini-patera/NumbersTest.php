@@ -30,6 +30,14 @@ class NumbersTest extends PHPUnit_Framework_TestCase
         $numberTranslate = new NumberTranslate(300);
         $this->assertEquals($expected,$numberTranslate->numberToLetter());
     }
+
+    public function test310IsTrecentodieci()
+    {
+        $expected = 'trecentodieci';
+        $numberTranslate = new NumberTranslate(310);
+        $this->assertEquals($expected,$numberTranslate->numberToLetter());
+    }
+
 }
 
 class NumberTranslate
@@ -42,9 +50,10 @@ class NumberTranslate
     ];
     private $cento = 'cento';
     private $mapDouble = [
-        '0' => 'cento',
-        '20' => 'venti',
-        '90' => 'novanta',
+        '0' => '',
+        '1' => 'dieci',
+        '2' => 'venti',
+        '9' => 'novanta',
     ];
 
     public function __construct($number)
@@ -76,7 +85,7 @@ class NumberTranslate
     {
         switch(strlen($this->number)) {
         case 2:
-            $key1 = $this->giveMeCharAt(0).'0';
+            $key1 = $this->giveMeCharAt(0);
             $key2 = $this->giveMeCharAt(1);
             return $this->finalResponse([
                 $this->mapDouble[$key1],
@@ -88,7 +97,7 @@ class NumberTranslate
             $key2 = $this->giveMeCharAt(1);
             $key3 = $this->giveMeCharAt(2);
             return $this->finalResponse([
-                $this->mapSingle[$key1],
+                $this->mapSingle[$key1].$this->cento,
                 $this->mapDouble[$key2],
                 $this->mapSingle[$key3]
             ]);
