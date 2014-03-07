@@ -24,6 +24,13 @@ class NumbersTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected,$numberTranslate->numberToLetter());
     }
 
+    public function test13IsTredici()
+    {
+        $expected = 'tredici';
+        $numberTranslate = new NumberTranslate(13);
+        $this->assertEquals($expected,$numberTranslate->numberToLetter());
+    }
+
     public function test300IsTrecento()
     {
         $expected = 'trecento';
@@ -42,17 +49,34 @@ class NumbersTest extends PHPUnit_Framework_TestCase
 
 class NumberTranslate
 {
+    private $cento = 'cento';
     private $mapSingle = [
         '0' => '',
         '1' => 'uno',
         '3' => 'tre',
         '9' => 'nove',
     ];
-    private $cento = 'cento';
+    private $mapTeenager = [
+        '11' => 'undici',
+        '12' => 'dodici',
+        '13' => 'tredici',
+        '14' => 'quattordici',
+        '15' => 'quindici',
+        '16' => 'sedici',
+        '17' => 'diciasette',
+        '18' => 'diciotto',
+        '19' => 'diciannove'
+    ];
     private $mapDouble = [
         '0' => '',
         '1' => 'dieci',
         '2' => 'venti',
+        '3' => 'trenta',
+        '4' => 'quaranta',
+        '5' => 'cinquanta',
+        '6' => 'sesanta',
+        '7' => 'settanta',
+        '8' => 'ottanta',
         '9' => 'novanta',
     ];
 
@@ -83,6 +107,11 @@ class NumberTranslate
 
     private function translate()
     {
+        if ($this->number >= 11 && $this->number <=19) {
+            return $this->mapTeenager[$this->number];
+        }
+
+
         switch(strlen($this->number)) {
         case 2:
             $key1 = $this->giveMeCharAt(0);
