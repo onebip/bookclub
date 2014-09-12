@@ -1,0 +1,3 @@
+0000000000000000000000000000000000000000 a691ff27e571c4b461c3bd44ad2814b23899b750 Danilo Silva <danilo.silva@neomobile.com> 1410525533 +0200	clone: from git@github.com:Badkill/phpunitScheleton.git
+a691ff27e571c4b461c3bd44ad2814b23899b750 d91fc68b76e9bd4fcfea7378e0ed79067a672d3d Danilo Silva <danilo.silva@neomobile.com> 1410531249 +0200	commit: Removed SampleTest
+d91fc68b76e9bd4fcfea7378e0ed79067a672d3d 3150d4cb81d13da8bde150d916d77649945bc6f6 Danilo Silva <danilo.silva@neomobile.com> 1410531275 +0200	commit: Event Sourcing implementation (three scenarios) of Alien Attack kata
