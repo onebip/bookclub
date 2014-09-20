@@ -1,6 +1,7 @@
 /*jshint asi: true, expr: true */
 
-var fs = require("fs")
+//
+//var stringify = require('JSON2').stringify
 
 
 var AlienInvasion = function(){
@@ -10,51 +11,60 @@ var AlienInvasion = function(){
     var towns = stringa.split(/\n/)
 
     // e.g. 'T north=N south=S'
-    function builder(stringa) {
-      var elems = stringa.split(' ')
+    function builder(acc, rawTown) {
+      var elems = rawTown.split(' ')
 
-      return {
-        name : elems[0],
-        roads : paver(elems.slice(1))
-      }
+      acc[elems[0]] = planner(elems.slice(1)) 
+      return acc
     }
 
     // e.g. ['north=N','south=S']
-    function paver(rawRoads) {
+    function planner(rawRoads) {
       return rawRoads
-      .map(function(rawRoad) {
-        return rawRoad.split('=')
-      })
-      .map(function(roadPieces) {
-        return {
-          direction : roadPieces[0],
-          destination : roadPieces[1]
-        }
-      })
+      .reduce(paver,{})
+
+      function paver(acc, rawRoad) {
+        var elems = rawRoad.split('=')
+        acc[elems[0]] = elems[1]
+        return acc
+      }
     }
 
-    return towns.map(function(rawTown) {
-      return builder(rawTown)
-    })
+    var rawTowns = towns.reduce(builder, {})
+
+    return Object.keys(rawTowns).reduce(function(townsAcc, townName) {
+
+      var roadsFromHere = townsAcc[townName] 
+      if (roadsFromHere) {
+        var directions = Object.keys(roadsFromHere)
+
+        var pippo = {}
+
+        directions.forEach(function(dir){
+
+          var destination = roadsFromHere[dir]
+          
+          pippo[dir] = function(){
+
+            return rawTowns[destination]
+          }
+        
+        })
+        townsAcc[townName] = pippo
+
+      } 
+      return townsAcc
+    }, rawTowns)
   }
 
   return {
-    towns: towns
-
+    towns : towns 
   }
 }()
 
-
-  function foldl(list,fun,acc) {
-    if (list.length === 0) return acc
-    var x = list.shift()
-    return foldl(list, fun, fun(acc, x))
-  }
-
-if (typeof module === "object" && typeof module.exports !== "undefined") {
+if (typeof module === 'object' && typeof module.exports !== 'undefined') {
   module.exports = {
-    AI: AlienInvasion,
-    foldl: foldl
+    AI: AlienInvasion
   }
 }
 
