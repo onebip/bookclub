@@ -1,0 +1,14 @@
+{
+  "framework": "mocha+chai",
+  "src_files": [
+    "code/*.js",
+    "spec/*.js"
+  ],
+  "src_files_ignore": "",
+  "launchers": {
+    "Mocha": {
+      "command": "mocha spec"
+    }
+  },
+  "launch_in_dev": ["Mocha"]
+}

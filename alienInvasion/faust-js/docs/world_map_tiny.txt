@@ -1,0 +1,4 @@
+E south=Malixo
+Malixo north=E south=Ege east=Dolamisme
+Ege north=Malixo
+Dolamisme west=Malixo

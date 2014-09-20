@@ -1,18 +1,16 @@
 {
-  "name": "alien-invasion",
+  "name": "alienInvasionJS",
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
-  "directories": {
-    "doc": "doc"
-  },
-  "dependencies": {
+  "directories": { },
+  "dependencies": { },
+  "devDependencies": {
     "mocha": "~1.21.4",
     "chai": "~1.9.1",
-    "sinon": "1.7.3",
-    "sinon-chai": "2.4.0"
-  },
-  "devDependencies": {
+    "sinon": "~1.7.3",
+    "testem": "~0.6.19",
+    "sinon-chai": "~2.4.0"
   },
   "scripts": {
     "test": "mocha"
@@ -22,9 +20,5 @@
     "url": "git://github.com/Neomobile/bookclub.git"
   },
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Neomobile/bookclub/issues"
-  },
-  "homepage": "https://github.com/Neomobile/bookclub"
+  "license": "ISC"
 }
