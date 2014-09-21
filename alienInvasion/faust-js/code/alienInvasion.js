@@ -15,6 +15,9 @@ var AlienInvasion = function () {
             var elems = rawTown.split(' ');
 
             acc[elems[0]] = planner(elems.slice(1));
+            // give each town its due name
+            acc[elems[0]].name = elems[0];
+            //console.log(acc[elems[0]])
             return acc;
         }
 
@@ -34,17 +37,23 @@ var AlienInvasion = function () {
 
         return Object.keys(rawTowns).reduce(function (townsAcc, townName) {
 
-            var roadsFromHere = townsAcc[townName];
+            var currentTown = townsAcc[townName];
+            var directionsFromHere = Object.keys(currentTown).filter(_directionsFilter)
             // enrich destinations: objects instead of strings
-            Object.keys(roadsFromHere).forEach(function(direction) {
+            directionsFromHere.forEach(function(direction) {
 
-                var destination = roadsFromHere[direction];
+                var destination = currentTown[direction];
                 townsAcc[townName][direction] = function () {
                     return rawTowns[destination];
                 };
             });
             return townsAcc;
         }, rawTowns);
+    }
+
+    function _directionsFilter(item) {
+      var forbiddens = ['name','visitor'];
+      return forbiddens.indexOf(item) === -1;
     }
 
     function landing(numAliens, towns){
@@ -59,10 +68,10 @@ var AlienInvasion = function () {
       while (cc < numAliens) {
         if (cc === townNames.length) { break; }
 
-        aliens['' + cc] = { name : '' + cc };
+        aliens['' + cc] = _alien(cc, aliens);
 
-        ;(function(pos) {
-          towns[townNames[pos]].visitor = function(){
+        (function(pos) {
+          towns[townNames[pos]].visitor = function() {
             return aliens['' + pos]
           };
         })(cc)
@@ -76,8 +85,80 @@ var AlienInvasion = function () {
       }
     }
 
+    function _alien(index, aliens){
+      var _name = '' + index;
+
+      return { 
+        name : '' + index, 
+        move : _move
+      };
+
+      function _move(startTown){
+
+        // e.g. ['north','east','south']
+        var directions = Object.keys(startTown)
+        .filter(_directionsFilter);
+        
+        if (directions.length > 0) {
+
+          var chosenIndex = ~~(Math.random() * directions.length)
+          var endTown = startTown[directions[chosenIndex]]();
+
+          console.log(endTown)
+          // get away from current town
+          startTown.visitor = function() {
+            return undefined;
+          }
+          // check possible next town visitor
+          if (!endTown.visitor()) {
+            // move to the next town
+            endTown.visitor = function() {
+              return aliens[_name]; 
+            }
+          } else {
+          // kill the bastard
+          delete aliens[endTown.visitor().name]; 
+          // destroy everything
+          delete towns[endTown.name];
+          // fall dead
+          delete aliens[_name];
+          }
+        }
+      }
+    }
+
     function game(rawWorld,numAliens) {
-      return landing(numAliens,towns(rawWorld))
+
+      function Wrapper(state) {
+        this.currentTurn = 0;
+        this.towns = state.towns;
+        this.aliens = state.aliens;
+      }
+
+      Wrapper.prototype.run = function(turns) {
+        this.currentTurn = turns;
+
+        setTimeout(_runner(this),1);
+
+        return this;
+      };
+
+      Wrapper.prototype.running = function() {
+        return this.currentTurn > 0;
+      };
+
+      function _runner(game) {
+        //while (game.running()) {
+        var aliens = game.aliens;
+
+        if (Object.keys(aliens).length > 0) {
+
+          aliens['0'].move({/*south:function(){return {}}*/})
+        }
+        //}
+      }
+
+      return new Wrapper(landing(numAliens,towns(rawWorld)))
     }
 
     return {

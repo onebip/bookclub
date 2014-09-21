@@ -31,6 +31,23 @@ describe('During an Alien Invasion', function(){
       delete towns['aaa']
       expect(towns['bbb']['north']()).to.be.undefined
     })
+    it('generates random indexes to test arrays\' ranges',function(){
+
+      var test1 = [0,1,2,3,4,5,6,7,8];
+      runn();
+      var test1 = [0,1];
+      runn();
+      var test1 = [0];
+      runn();
+
+      function runn() {
+        for (cc = 0; cc < 1000; cc++) {
+          var ttt = ~~(Math.random() * test1.length);
+          expect(ttt).to.be.at.least(0)
+          expect(ttt).to.be.at.most(test1.length-1)
+        }
+      }
+    })
   })
 
   describe('during world creation it', function(){ 
@@ -42,7 +59,7 @@ describe('During an Alien Invasion', function(){
       var townNames = Object.keys(towns)
 
       expect(townNames.length).to.be.equal(2)
-      expect(Object.keys(towns['S']).length).to.be.equal(1)
+      expect(Object.keys(towns['S']).length).to.be.equal(2) // count 'name' as well
 
       expect(towns['S']['north']()).to.be.equal(towns['N'])
     })
@@ -75,7 +92,7 @@ describe('During an Alien Invasion', function(){
       var towns = ai.towns(stringa);
 
       var roadsFromNW = towns['NW']
-      expect(Object.keys(roadsFromNW).length).to.be.equal(2)
+      expect(Object.keys(roadsFromNW).length).to.be.equal(3) // count 'name' as well
       expect(roadsFromNW['south']()).to.be.equal(towns['SW'])
 
       delete towns['SW']
@@ -170,54 +187,107 @@ describe('During an Alien Invasion', function(){
       expect(alienNames).to.have.members(['0','1','2'])
     }) 
 
-    it('starts by recording the number of game turns') 
+    describe('when realistic',function(){
+      beforeEach(function() {
+        var stringa = 'NW east=NE south=SW\nNE west=NW south=SE\nSE north=NE west=SW\nSW east=SE north=NW';
+        this.game = ai.game(stringa,2);
+      })
 
-    it('sends individual aliens asynch messages with order to move')
+      it('starts by recording the number of game turns',function(){
+        this.game.run(10);
+        expect(this.game.running()).to.be.true
+      }) 
 
+      it('sends individual aliens asynch messages with order to move',function(done){
+        var alien0 = this.game.aliens['0'];
+        alien0.move = sinon.spy();
+        this.game.run(10);
 
-    it('ends when turns are over') 
-    it('ends when all aliens are dead') 
-    it('ends by telling how many towns are left on the planet')
-  
+        setTimeout(function(){
+          expect(alien0.move).to.have.been.called;
+          done();
+        },50)
+      })
+
+/*
+      it('ends when turns are over') 
+      it('ends when all aliens are dead') 
+      it('ends by telling how many aliens and towns are left on the planet')
+      */
+    })
   })
-
-
- /* 
-  describe('an alien',function(){
-    it('reacts to a request to move') 
-    it('finds his way from a given town') 
-    it('detects other aliens in a town')
-    it('can destroy a town')
-    it('can kill actively another alien')
-    it('always dies hard')
-    it('can kill a town\'s visitor') 
   
+  describe('an alien',function(){
+
+    describe('in a single-alien simulation',function(){
+      beforeEach(function() {
+        var stringa = 'N south=S\nS north=N';
+        this.game = ai.game(stringa,1);
+      })
+
+      it.skip('reacts to a request to move',function(){
+        var game = this.game;
+        expect(game.towns['N'].visitor()).to.exist
+        expect(game.towns['S'].visitor()).to.not.exist
+
+        // TODO - possibly needed by the game controller
+
+      }) 
+
+      it('finds his way from a given town',function(){
+        var game = this.game;
+        var townN = game.towns['N']
+        var alien0 = game.aliens['0']
+        alien0.move(townN)
+        expect(game.towns['S'].visitor()).to.be.equal(alien0)
+        expect(game.towns['N'].visitor()).to.not.exist
+      }) 
+    })
+
+    describe('in a dual-alien simulation',function(){
+      beforeEach(function() {
+        var stringa = 'N south=S\nS north=N';
+        this.game = ai.game(stringa,2);
+      })
+
+      it('detects other aliens in a town',function(){
+        var game = this.game;
+        var townN = game.towns['N'];
+        var alien0 = game.aliens['0'];
+        expect(game.towns['S'].visitor()).to.be.equal(game.aliens['1']);
+        game.towns['S'].visitor = sinon.spy(game.towns['S'],'visitor');
+        alien0.move(townN);
+        expect(game.towns['S'].visitor).to.have.been.called;
+      })
+
+      describe('after seeing a rival at the horizon',function(){
+        beforeEach(function() {
+          this.townN = this.game.towns['N'];
+          this.alien0 = this.game.aliens['0'];
+        })
+
+        it('can kill a town\'s visitor',function(){
+          expect(this.game.aliens['1']).to.exist;
+          this.alien0.move(this.townN);
+          expect(this.game.aliens['1']).to.not.exist;
+        })
+
+        it('can destroy a town',function(){
+          this.alien0.move(this.townN);
+          expect(this.game.towns['S']).to.not.exist;
+        })
+
+        it('always dies hard',function(){
+          this.alien0.move(this.townN);
+          expect(this.game.aliens['0']).to.not.exist;
+        })
+      })
+    }) 
   })
 
   describe('a town',function(){
     it('reacts to a request to know about its visitor') 
   })
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
