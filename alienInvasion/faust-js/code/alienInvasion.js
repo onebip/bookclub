@@ -68,7 +68,7 @@ var AlienInvasion = function () {
       while (cc < numAliens) {
         if (cc === townNames.length) { break; }
 
-        aliens['' + cc] = _alien(cc, aliens);
+        aliens['' + cc] = _alien(cc, aliens, towns);
 
         (function(pos) {
           towns[townNames[pos]].visitor = function() {
@@ -85,7 +85,7 @@ var AlienInvasion = function () {
       }
     }
 
-    function _alien(index, aliens){
+    function _alien(index, aliens, towns){
       var _name = '' + index;
 
       return { 
@@ -104,7 +104,6 @@ var AlienInvasion = function () {
           var chosenIndex = ~~(Math.random() * directions.length)
           var endTown = startTown[directions[chosenIndex]]();
 
-          console.log(endTown)
           // get away from current town
           startTown.visitor = function() {
             return undefined;
