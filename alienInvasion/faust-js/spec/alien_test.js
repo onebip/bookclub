@@ -10,99 +10,100 @@ chai.use(require('sinon-chai'))
 var JSON2 = require('JSON2')
 var stringify = JSON2.stringify
 var fs = require('fs')
+var Q = require('q')
 
 var code = require('../code/alienInvasion')
 var ai = code.AI
 
 describe('During an Alien Invasion', function(){
+  /*
+     describe('as a spike to explore implementation mechanics ',function(){
+     it('we remove object props and leave pointers undefined by using getters instead of straight references', function(){
 
-  describe('as a spike to explore implementation mechanics ',function(){
-    it('we remove object props and leave pointers undefined by using getters instead of straight references', function(){
+     function fab() {return towns['bbb']}
+     function fba() {return towns['aaa']}
+     var towns = {
+aaa : {south:fab},
+bbb : {north:fba}
+}
 
-      function fab() {return towns['bbb']}
-      function fba() {return towns['aaa']}
-      var towns = {
-        aaa : {south:fab},
-        bbb : {north:fba}
-      }
+expect(towns['bbb']['north']()).to.be.equal(towns['aaa'])
 
-      expect(towns['bbb']['north']()).to.be.equal(towns['aaa'])
+delete towns['aaa']
+expect(towns['bbb']['north']()).to.be.undefined
+})
+it('generates random indexes to test arrays\' ranges',function(){
 
-      delete towns['aaa']
-      expect(towns['bbb']['north']()).to.be.undefined
+var test1 = [0,1,2,3,4,5,6,7,8];
+runn();
+var test1 = [0,1];
+runn();
+var test1 = [0];
+runn();
+
+function runn() {
+for (cc = 0; cc < 1000; cc++) {
+var ttt = ~~(Math.random() * test1.length);
+expect(ttt).to.be.at.least(0)
+expect(ttt).to.be.at.most(test1.length-1)
+}
+}
+})
+})
+
+describe('during world creation it', function(){ 
+it('is possible to create two towns from a formatted string', function(){
+
+var stringa = 'S north=N\nN south=S';
+
+var towns = ai.towns(stringa);
+var townNames = Object.keys(towns)
+
+expect(townNames.length).to.be.equal(2)
+expect(Object.keys(towns['S']).length).to.be.equal(2) // count 'name' as well
+
+expect(towns['S']['north']()).to.be.equal(towns['N'])
+})
+
+it('should be possible to have a 1-town world',function(){
+var oneTown = ai.towns('XXX')
+expect(Object.keys(oneTown).length).to.be.equal(1)
+expect(oneTown['XXX']).to.be.not.undefined
+expect(Object.keys(oneTown['XXX']).length).to.be.equal(1)
+})
+
+it('is possible to read and compile a large file',function(){
+
+var largeWorld = fs.readFileSync(__dirname + '/../docs/world_map_large.txt','utf8')
+var towns = ai.towns(largeWorld)
+var townNames = Object.keys(towns)
+
+expect(townNames.length).to.be.equal(6764)
+
+expect(towns[townNames[2747]]['west']()).to.be.equal(towns[townNames[4331]])
+expect(towns[townNames[428]]['north']()).to.be.equal(towns[townNames[676]])
+expect(towns[townNames[4034]]['south']()).to.be.equal(towns[townNames[4278]])
+expect(towns[townNames[6761]]['east']()).to.be.equal(towns[townNames[2486]])
+expect(towns[townNames[1743]]['south']()).to.be.equal(towns[townNames[1987]])
+})
+
+it('is possible to destroy the towns just created', function(){
+
+    var stringa = 'NW east=NE south=SW\nNE west=NW south=SE\nSE north=NE west=SW\nSW east=SE north=NW';
+    var towns = ai.towns(stringa);
+
+    var roadsFromNW = towns['NW']
+    expect(Object.keys(roadsFromNW).length).to.be.equal(3) // count 'name' as well
+    expect(roadsFromNW['south']()).to.be.equal(towns['SW'])
+
+    delete towns['SW']
+    expect(Object.keys(towns).length).to.be.equal(3)
+    expect(roadsFromNW['south']()).to.be.undefined
+
     })
-    it('generates random indexes to test arrays\' ranges',function(){
+})
 
-      var test1 = [0,1,2,3,4,5,6,7,8];
-      runn();
-      var test1 = [0,1];
-      runn();
-      var test1 = [0];
-      runn();
-
-      function runn() {
-        for (cc = 0; cc < 1000; cc++) {
-          var ttt = ~~(Math.random() * test1.length);
-          expect(ttt).to.be.at.least(0)
-          expect(ttt).to.be.at.most(test1.length-1)
-        }
-      }
-    })
-  })
-
-  describe('during world creation it', function(){ 
-    it('is possible to create two towns from a formatted string', function(){
-
-      var stringa = 'S north=N\nN south=S';
-
-      var towns = ai.towns(stringa);
-      var townNames = Object.keys(towns)
-
-      expect(townNames.length).to.be.equal(2)
-      expect(Object.keys(towns['S']).length).to.be.equal(2) // count 'name' as well
-
-      expect(towns['S']['north']()).to.be.equal(towns['N'])
-    })
-
-    it('should be possible to have a 1-town world',function(){
-      var oneTown = ai.towns('XXX')
-      expect(Object.keys(oneTown).length).to.be.equal(1)
-      expect(oneTown['XXX']).to.be.not.undefined
-      expect(Object.keys(oneTown['XXX']).length).to.be.equal(1)
-    })
-
-    it('is possible to read and compile a large file',function(){
-
-      var largeWorld = fs.readFileSync(__dirname + '/../docs/world_map_large.txt','utf8')
-      var towns = ai.towns(largeWorld)
-      var townNames = Object.keys(towns)
-
-      expect(townNames.length).to.be.equal(6764)
-
-      expect(towns[townNames[2747]]['west']()).to.be.equal(towns[townNames[4331]])
-      expect(towns[townNames[428]]['north']()).to.be.equal(towns[townNames[676]])
-      expect(towns[townNames[4034]]['south']()).to.be.equal(towns[townNames[4278]])
-      expect(towns[townNames[6761]]['east']()).to.be.equal(towns[townNames[2486]])
-      expect(towns[townNames[1743]]['south']()).to.be.equal(towns[townNames[1987]])
-    })
-
-    it('is possible to destroy the towns just created', function(){
-
-      var stringa = 'NW east=NE south=SW\nNE west=NW south=SE\nSE north=NE west=SW\nSW east=SE north=NW';
-      var towns = ai.towns(stringa);
-
-      var roadsFromNW = towns['NW']
-      expect(Object.keys(roadsFromNW).length).to.be.equal(3) // count 'name' as well
-      expect(roadsFromNW['south']()).to.be.equal(towns['SW'])
-
-      delete towns['SW']
-      expect(Object.keys(towns).length).to.be.equal(3)
-      expect(roadsFromNW['south']()).to.be.undefined
-
-    })
-  })
-
-  describe('during the initial landing it',function(){
+describe('during the initial landing it',function(){
     it('is possible to land one alien in a one-town world',function(){
 
       var towns = ai.towns('Capitol')
@@ -114,7 +115,7 @@ describe('During an Alien Invasion', function(){
       expect(towns['Capitol'].visitor().name).to.be.equal('0')
 
       expect(Object.keys(worldState.aliens)).to.have.members(['0'])
-    })
+      })
 
     it('is possible to land two aliens in a two-town world',function(){
 
@@ -126,39 +127,39 @@ describe('During an Alien Invasion', function(){
       expect(alienNames.length).to.be.equal(2)
       expect(towns['S'].visitor().name).to.satisfy(function(alienName){
         return alienNames.indexOf(alienName) !== -1
-      }) 
+        }) 
       expect(towns['N'].visitor().name).to.satisfy(function(alienName){
         return alienNames.indexOf(alienName) !== -1
-      }) 
-    })
+        }) 
+      })
 
     it('is possible to land N aliens in a 2*N-towns world',function(){
 
-      var stringa = 'NW east=NE south=SW\nNE west=NW south=SE\nSE north=NE west=SW\nSW east=SE north=NW';
-      var towns = ai.towns(stringa);
-      var worldState = ai.landing(2,towns)
+        var stringa = 'NW east=NE south=SW\nNE west=NW south=SE\nSE north=NE west=SW\nSW east=SE north=NW';
+        var towns = ai.towns(stringa);
+        var worldState = ai.landing(2,towns)
 
-      var alienNames = Object.keys(worldState.aliens);
-      expect(alienNames.length).to.be.equal(2)
+        var alienNames = Object.keys(worldState.aliens);
+        expect(alienNames.length).to.be.equal(2)
 
-      Object.keys(towns).forEach(function(townName){
-        if (towns[townName].visitor()) {
+        Object.keys(towns).forEach(function(townName){
+          if (towns[townName].visitor()) {
           expect(towns[townName].visitor().name).to.satisfy(function(alienName){
             return alienNames.indexOf(alienName) !== -1
-          }) 
-        }
-      });
-      expect(Object.keys(worldState.aliens)).to.have.members(['0','1'])
-    })
+            }) 
+          }
+          });
+        expect(Object.keys(worldState.aliens)).to.have.members(['0','1'])
+        })
 
     it('is NOT possible to overcrowd a world',function(){
-      var towns = ai.towns('Capitol')
-      var worldState = ai.landing(20,towns)
-      expect(Object.keys(worldState.aliens).length).to.be.equal(1)
-      expect(towns['Capitol'].visitor()).to.be.equal(worldState.aliens['0'])
-    })
-  })
-
+        var towns = ai.towns('Capitol')
+        var worldState = ai.landing(20,towns)
+        expect(Object.keys(worldState.aliens).length).to.be.equal(1)
+        expect(towns['Capitol'].visitor()).to.be.equal(worldState.aliens['0'])
+        })
+})
+*/
   describe('the game',function(){
 
     it('starts by creating a N-towns world from a string',function(){
@@ -169,7 +170,7 @@ describe('During an Alien Invasion', function(){
     }) 
 
     it('starts by landing X aliens', function(){
-      
+
       var stringa = 'NW east=NE south=SW\nNE west=NW south=SE\nSE north=NE west=SW\nSW east=SE north=NW';
       var game = ai.game(stringa,3);
       expect(Object.keys(game.towns).length).to.be.equal(4)
@@ -195,7 +196,7 @@ describe('During an Alien Invasion', function(){
 
       it('starts by recording the number of game turns',function(){
         this.game.run(10);
-        expect(this.game.running()).to.be.true
+        expect(this.game.running()).to.be.true;
       }) 
 
       it('sends individual aliens asynch messages with order to move',function(done){
@@ -209,12 +210,62 @@ describe('During an Alien Invasion', function(){
         },50)
       })
 
-      it('ends when turns are over') 
-      it('ends when all aliens are dead') 
-      it('ends by telling how many aliens and towns are left on the planet')
-    })
-  })
-  
+      it('ends when turns are over',function(){
+        this.game.run(0);
+        expect(this.game.running()).to.be.false;
+      }) 
+
+      it('ends when all aliens are dead',function(){
+        var stringa = 'NW east=NE south=SW\nNE west=NW south=SE\nSE north=NE west=SW\nSW east=SE north=NW';
+        this.game = ai.game(stringa,0);
+        this.game.run(5);
+        expect(this.game.running()).to.be.false;
+
+      }) 
+
+      it('ends by telling how many aliens and towns are left on the planet',function(){
+        var result = this.game.run(0);
+        expect(result.currentTurn).to.be.equal(0)
+        expect(Object.keys(result.aliens).length).to.be.equal(2)
+        expect(Object.keys(result.towns).length).to.be.equal(4)
+      })
+
+      it('decreases currentTurn as the game proceeds',function(done){
+        var self = this;
+        this.game.run(5);
+        expect(this.game.currentTurn).to.be.equal(5);
+
+        waitForZero().then(function(msg){
+          console.log('msg-->'+msg)
+            done();
+          console.log('eeeeeeeeeeeeeeeeeee')
+          console.log('ppppppppppppppppppppp')
+        },function(err){
+          console.log('err'+err)
+          expect(err).to.be.equal('')
+          console.log('ppppppppppppppppppppp')
+          expect(err).to.be.equal('')
+            done();
+        })
+
+        function waitForZero() {
+          var gotToZero = Q.defer(); 
+
+          setTimeout(function(){
+            if (self.game.currentTurn > 0) {
+              gotToZero.resolve('ZEROOOOOO')
+            } else {
+            console.log(self.game.currentTurn)
+              gotToZero.reject('did not end')
+            }
+            console.log('returning')
+          },1000)
+          return gotToZero.promise;
+        }
+      })
+    })  
+  })  
+
   describe('an alien',function(){
 
     describe('in a single-alien simulation',function(){

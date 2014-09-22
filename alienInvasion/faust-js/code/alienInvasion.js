@@ -143,7 +143,7 @@ var AlienInvasion = function () {
       };
 
       Wrapper.prototype.running = function() {
-        return this.currentTurn > 0;
+        return this.currentTurn > 0 && Object.keys(this.aliens).length > 0;
       };
 
       function _runner(game) {
@@ -152,7 +152,7 @@ var AlienInvasion = function () {
 
         if (Object.keys(aliens).length > 0) {
 
-          aliens['0'].move({/*south:function(){return {}}*/})
+          aliens['0'].move({})
         }
         //}
       }
