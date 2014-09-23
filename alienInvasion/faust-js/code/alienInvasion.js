@@ -137,24 +137,28 @@ var AlienInvasion = function () {
       Wrapper.prototype.run = function(turns) {
         this.currentTurn = turns;
 
-        setTimeout(_runner(this),1);
+        setTimeout(_runner(this),1000);
 
         return this;
       };
 
       Wrapper.prototype.running = function() {
-        return this.currentTurn > 0 && Object.keys(this.aliens).length > 0;
+        return this.currentTurn > 0 
+        && Object.keys(this.aliens).length > 0;
       };
 
       function _runner(game) {
-        //while (game.running()) {
-        var aliens = game.aliens;
 
-        if (Object.keys(aliens).length > 0) {
+        while (game.running()) {
+          var aliens = game.aliens;
 
-          aliens['0'].move({})
+          if (Object.keys(aliens).length > 0) {
+
+            aliens['0'].move({});
+          }
+          game.currentTurn--;
+          //console.log()
         }
-        //}
       }
 
       return new Wrapper(landing(numAliens,towns(rawWorld)))
