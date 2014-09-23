@@ -236,29 +236,20 @@ describe('during the initial landing it',function(){
         expect(this.game.currentTurn).to.be.equal(5);
 
         waitForZero().then(function(msg){
-          console.log('msg-->'+msg)
             done();
-          console.log('eeeeeeeeeeeeeeeeeee')
-          console.log('ppppppppppppppppppppp')
         },function(err){
-          console.log('err'+err)
-          expect(err).to.be.equal('')
-          console.log('ppppppppppppppppppppp')
-          expect(err).to.be.equal('')
-            done();
+            done('KO');
         })
 
         function waitForZero() {
           var gotToZero = Q.defer(); 
 
           setTimeout(function(){
-            if (self.game.currentTurn > 0) {
-              gotToZero.resolve('ZEROOOOOO')
+            if (self.game.currentTurn === 0) {
+              gotToZero.resolve('OK')
             } else {
-            console.log(self.game.currentTurn)
               gotToZero.reject('did not end')
             }
-            console.log('returning')
           },1000)
           return gotToZero.promise;
         }
