@@ -59,5 +59,6 @@ class MineSweeper
                 }
             }
         }
+        return $contaBombe;
     }
 }

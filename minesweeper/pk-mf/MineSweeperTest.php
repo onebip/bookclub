@@ -48,6 +48,7 @@ class MineSweeperTest extends \PHPUnit_Framework_TestCase
         $campoDiGioco = $this->minesweeper->preparaCampoDiGioco($this->board);
         $this->assertEquals('*', $this->minesweeper->bombeAttorno(0, 0, $campoDiGioco));
         $this->assertEquals('0', $this->minesweeper->bombeAttorno(0, 3, $campoDiGioco));
-        //$this->assertEquals('1', $this->minesweeper->bombeAttorno(1, 2, $campoDiGioco));
+        $this->assertEquals('1', $this->minesweeper->bombeAttorno(1, 2, $campoDiGioco));
+        $this->assertEquals('2', $this->minesweeper->bombeAttorno(1, 1, $campoDiGioco));
     }
 }
