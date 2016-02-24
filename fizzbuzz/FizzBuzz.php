@@ -47,12 +47,3 @@ class MultipleOfFive extends Multiple
         }
     }
 }
-class MultipleOfThreeAndFive extends Multiple
-{
-    public function output($number)
-    {
-        if ($number % 3 === 0 && $number % 5 === 0) {
-            return 'FizzBuzz';
-        }
-    }
-}
