@@ -4,46 +4,48 @@ class FizzBuzz
 {
     private $rules = [];
 
-    public function __construct()
+    public function __construct(array $rules)
     {
-        $this->rules[] = new MultipleOfThree();
-        $this->rules[] = new MultipleOfFive();
+        $this->rules = $rules;
     }
 
-    public function check($number)
+    public function play($number)
     {
         $output = '';
+
         foreach ($this->rules as $rule) {
             $output .= $rule->output($number);
         }
 
         if (strlen($output)) {
-            return $output . PHP_EOL;
+            return $output;
         }
-        return $number . PHP_EOL;
+        return $number;
     }
 }
 
-abstract class Multiple
+class FizzBuzzPrettyString
 {
-    abstract public function output($number);
-}
-
-class MultipleOfThree extends Multiple
-{
-    public function output($number)
+    public static function output(FizzBuzz $fizzBuzz, $number)
     {
-        if ($number % 3 === 0) {
-            return 'Fizz';
-        }
+        return $fizzBuzz->play($number) . PHP_EOL;
     }
 }
-class MultipleOfFive extends Multiple
+class MultipleKnowledge
 {
-    public function output($number)
+    private $number;
+    private $output;
+
+    public function __construct($number, $output)
     {
-        if ($number % 5 === 0) {
-            return 'Buzz';
+        $this->number = $number;
+        $this->output = $output;
+    }
+
+    public function output($input)
+    {
+        if ($input % $this->number == 0) {
+            return $this->output;
         }
     }
 }
