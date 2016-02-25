@@ -50,7 +50,7 @@ class TestFizzBuzz extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'Fizz' . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, 3)
+            FizzBuzzPrettyString::output($this->fizzBuzz, (3 * 1))
         );
     }
 
@@ -58,7 +58,7 @@ class TestFizzBuzz extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'Buzz' . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, 5)
+            FizzBuzzPrettyString::output($this->fizzBuzz, (5 * 1))
         );
     }
 
@@ -66,7 +66,7 @@ class TestFizzBuzz extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'Fizz' . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, 6)
+            FizzBuzzPrettyString::output($this->fizzBuzz, (3 * 2))
         );
     }
 
@@ -74,7 +74,7 @@ class TestFizzBuzz extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'Buzz' . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, 10)
+            FizzBuzzPrettyString::output($this->fizzBuzz, (5 * 2))
         );
     }
 
@@ -82,7 +82,7 @@ class TestFizzBuzz extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'FizzBuzz' . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, 15)
+            FizzBuzzPrettyString::output($this->fizzBuzz, (3 * 5))
         );
     }
 
@@ -90,7 +90,7 @@ class TestFizzBuzz extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'FizzBuzz' . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, 30)
+            FizzBuzzPrettyString::output($this->fizzBuzz, (3 * 10))
         );
     }
 }
