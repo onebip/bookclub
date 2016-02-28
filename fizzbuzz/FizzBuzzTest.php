@@ -15,82 +15,118 @@ class TestFizzBuzz extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fizzBuzz = new FizzBuzz([
-            new MultipleKnowledge(3, 'Fizz'),
-            new MultipleKnowledge(5, 'Buzz'),
-            //new MultipleKnowledge(7, 'Bang'),
-        ]);
+        $this->fizzBuzz = new FizzBuzz(
+            [
+                Rule::fromFactorAndOutput(3, 'Fizz'),
+                Rule::fromFactorAndOutput(5, 'Buzz'),
+            ],
+            [
+                new PositiveIntegerValidator()
+            ]
+        );
     }
 
-    public function test0IsAMutipleOf3And5()
+    public function test0IsAMultipleOf3And5()
+    {
+        $this->assertEquals(
+            'FizzBuzz',
+            $this->fizzBuzz->play(0)
+        );
+    }
+
+    public function test1IsNotAMultipleOf3And5()
+    {
+        $this->assertEquals(
+            1,
+            $this->fizzBuzz->play(1)
+        );
+    }
+
+    public function test2IsNotAMultipleOf3And5()
+    {
+        $this->assertEquals(
+            2,
+            $this->fizzBuzz->play(2)
+        );
+    }
+
+    public function test3IsAMultipleOf3()
+    {
+        $this->assertEquals(
+            'Fizz',
+            $this->fizzBuzz->play(3)
+        );
+    }
+
+    public function test5IsAMultipleOf5()
+    {
+        $this->assertEquals(
+            'Buzz',
+            $this->fizzBuzz->play(5)
+        );
+    }
+
+    public function test6IsAMultipleOf3()
+    {
+        $this->assertEquals(
+            'Fizz',
+            $this->fizzBuzz->play((3 * 2))
+        );
+    }
+
+    public function test10IsAMultipleOf5()
+    {
+        $this->assertEquals(
+            'Buzz',
+            $this->fizzBuzz->play((5 * 2))
+        );
+    }
+
+    public function test15IsAMultipleOf3And5()
+    {
+        $this->assertEquals(
+            'FizzBuzz',
+            $this->fizzBuzz->play((3 * 5))
+        );
+    }
+
+    public function test30IsAMultipleOf3And5()
+    {
+        $this->assertEquals(
+            'FizzBuzz',
+            $this->fizzBuzz->play((3 * 5 * 2))
+        );
+    }
+
+    public function test60IsAMultipleOf3And5()
+    {
+        $this->assertEquals(
+            'FizzBuzz',
+            $this->fizzBuzz->play((3 * 5 * 4))
+        );
+    }
+
+    /**
+     * @expectedException InvalidArgument 
+     */
+    public function testMinus1IsNotAMultipleOf3And5()
+    {
+        $this->fizzBuzz->play(-1);
+    }
+
+    /**
+     * @expectedException InvalidArgument 
+     */
+    public function testEmptyInputIsNotAMultipleOf3And5()
+    {
+        $this->fizzBuzz->play('');
+    }
+
+    public function testConsoleSingleLinePrintsFizzBuzzOutputCorrectly()
     {
         $this->assertEquals(
             'FizzBuzz' . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, 0)
-        );
-    }
-
-    public function test1IsNotAMutipleOf3And5()
-    {
-        $this->assertEquals(
-            1 . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, 1)
-        );
-    }
-
-    public function test2IsNotAMutipleOf3And5()
-    {
-        $this->assertEquals(
-            2 . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, 2)
-        );
-    }
-
-    public function test3IsAMutipleOf3()
-    {
-        $this->assertEquals(
-            'Fizz' . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, (3 * 1))
-        );
-    }
-
-    public function test5IsAMutipleOf5()
-    {
-        $this->assertEquals(
-            'Buzz' . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, (5 * 1))
-        );
-    }
-
-    public function test6IsAMutipleOf3()
-    {
-        $this->assertEquals(
-            'Fizz' . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, (3 * 2))
-        );
-    }
-
-    public function test10IsAMutipleOf5()
-    {
-        $this->assertEquals(
-            'Buzz' . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, (5 * 2))
-        );
-    }
-
-    public function test15IsAMutipleOf3And5()
-    {
-        $this->assertEquals(
-            'FizzBuzz' . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, (3 * 5))
-        );
-    }
-
-    public function test30IsAMutipleOf3And5()
-    {
-        $this->assertEquals(
-            'FizzBuzz' . PHP_EOL,
-            FizzBuzzPrettyString::output($this->fizzBuzz, (3 * 10))
+            ConsoleSingleLine::output($this->fizzBuzz->play((3 * 5)))
         );
     }
 }

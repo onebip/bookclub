@@ -3,49 +3,92 @@
 class FizzBuzz
 {
     private $rules = [];
+    private $validators = [];
 
-    public function __construct(array $rules)
+    public function __construct(array $rules, array $validators)
     {
         $this->rules = $rules;
+        $this->validators = $validators;
     }
 
-    public function play($number)
+    public function play($input)
     {
+        foreach ($this->validators as $validator) {
+            if (!$validator->isValid($input)) {
+                throw new InvalidArgument(
+                    $input . ' is not a valid number'
+                );
+            }
+        }
+
         $output = '';
 
         foreach ($this->rules as $rule) {
-            $output .= $rule->output($number);
+            $output .= $rule->output($input);
         }
 
         if (strlen($output)) {
             return $output;
         }
-        return $number;
+        return $input;
     }
 }
 
-class FizzBuzzPrettyString
+class ConsoleSingleLine 
 {
-    public static function output(FizzBuzz $fizzBuzz, $number)
+    public static function output($string)
     {
-        return $fizzBuzz->play($number) . PHP_EOL;
+        return $string . PHP_EOL;
     }
 }
-class MultipleKnowledge
+class Rule
 {
-    private $number;
+    private $factor;
     private $output;
 
-    public function __construct($number, $output)
+    private function __construct($factor, $output)
     {
-        $this->number = $number;
+        $this->factor = $factor;
         $this->output = $output;
+    }
+
+    public static function fromFactorAndOutput($factor, $output) 
+    {
+        return new self($factor, $output);
     }
 
     public function output($input)
     {
-        if ($input % $this->number == 0) {
+        if ($this->isFactorOf($input)) {
             return $this->output;
         }
+
+        return '';
+    }
+
+    private function isFactorOf($input)
+    {
+        if ($input % $this->factor === 0) {
+            return true;
+        }
+
+        return false;
     }
 }
+
+interface BaseValidator
+{
+    public function isValid($input);
+}
+class PositiveIntegerValidator implements BaseValidator
+{
+    public function isValid($input)
+    {
+        if ((is_int($input) || ctype_digit($input)) && (int)$input>= 0) { 
+            return true;
+        }
+
+        return false;
+    } 
+}
+class InvalidArgument extends \Exception{};
