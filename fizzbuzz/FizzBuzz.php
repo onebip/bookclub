@@ -30,6 +30,7 @@ class FizzBuzz
         if (strlen($output)) {
             return $output;
         }
+
         return $input;
     }
 }
