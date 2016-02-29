@@ -6,6 +6,12 @@ class NumbersOfInterest
     {
         $lines = explode(PHP_EOL, $input);
         $numberOfSeries = array_shift($lines);
+
+        if ($numberOfSeries < 1) {
+            throw new InvalidArgumentException(
+                'Number of series to be performed "' . $numberOfSeries . '" not valid (>=1)'
+            );
+        }
         $series = [];
 
         for ($counter=0; $counter< $numberOfSeries; $counter++) {

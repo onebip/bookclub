@@ -57,4 +57,16 @@ EOT;
             )
         );
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function test0NumberOfSeriesICanCalculateNumbersOfInterest()
+    {
+        $input = <<<EOT
+0
+3 2 7
+EOT;
+        NumbersOfInterest::calculate($input);
+    }
 }
