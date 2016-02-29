@@ -19,7 +19,7 @@ class NumbersOfInterest
     {
         list($x, $y, $n) = explode(' ', $series);
 
-        // first part of the series
+        // first part of the series 
         $currentSeries = array_fill(0, $x, $y);
 
         for ($cursor=0; $cursor  < ($n-$x); $cursor++) {
