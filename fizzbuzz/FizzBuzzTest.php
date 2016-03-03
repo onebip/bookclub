@@ -107,7 +107,7 @@ class TestFizzBuzz extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgument 
+     * @expectedException InvalidArgumentException 
      */
     public function testMinus1IsNotAMultipleOf3And5()
     {
@@ -115,7 +115,7 @@ class TestFizzBuzz extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgument 
+     * @expectedException InvalidArgumentException 
      */
     public function testEmptyInputIsNotAMultipleOf3And5()
     {

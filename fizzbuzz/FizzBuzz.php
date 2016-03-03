@@ -15,7 +15,7 @@ class FizzBuzz
     {
         foreach ($this->validators as $validator) {
             if (!$validator->isValid($input)) {
-                throw new InvalidArgument(
+                throw new \InvalidArgumentException(
                     $input . ' is not a valid number'
                 );
             }
@@ -92,4 +92,3 @@ class PositiveIntegerValidator implements BaseValidator
         return false;
     } 
 }
-class InvalidArgument extends \Exception{};
