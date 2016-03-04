@@ -1,7 +1,7 @@
 <?php
 namespace NumbersOfInterest;
-require_once __DIR__ . '/SeriesProperties.php';
-use NumbersOfInterest\SeriesProperties;
+
+require_once __DIR__ . '/../../../model/NumbersOfInterest/SeriesProperties.php';
 
 class SeriesPropertiesTest extends \PHPUnit_Framework_TestCase
 {

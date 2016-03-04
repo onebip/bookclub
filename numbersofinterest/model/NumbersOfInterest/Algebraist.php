@@ -1,26 +1,24 @@
 <?php
 namespace NumbersOfInterest;
 
-require_once __DIR__ . '/SeriesArrayToConsoleLine.php';
-require_once __DIR__ . '/Options.php';
-
-use NumbersOfInterest\Options;
-use NumbersOfInterest\SeriesProperties;
+require_once __DIR__ . '/../../ui/InputOutputOperations/SeriesArrayToConsoleLine.php';
+require_once __DIR__ . '/../../ui/InputOutputOperations/Options.php';
+use UI\Options;
 
 class Algebraist
 {
-    public static function calculate(Options $options)
+    public function calculate(Options $options)
     {
         $series = [];
 
-        foreach ($options->toArray() as $seriesOption) {
+        foreach ($options->all() as $seriesOption) {
             $series[] = self::calculateSeriesSequence($seriesOption);
         }
 
         return $series;
     }
 
-    private static function calculateSeriesSequence($seriesOption)
+    private function calculateSeriesSequence($seriesOption)
     {
         $properties = SeriesProperties::fromArray($seriesOption);
 
@@ -29,13 +27,13 @@ class Algebraist
 
         for ($cursor=0; $cursor< ($properties->totalOfNumbers-$properties->occurencesOfReferenceNumber); $cursor++) {
             // adding sum at position cursor + occurencesOfReferenceNumber
-            $currentSeries[$cursor+$properties->occurencesOfReferenceNumber] = self::sumUntil($properties->occurencesOfReferenceNumber, $currentSeries, $cursor);
+            $currentSeries[$cursor+$properties->occurencesOfReferenceNumber] = $this->sumUntil($properties->occurencesOfReferenceNumber, $currentSeries, $cursor);
         }
 
         return $currentSeries;
     }
 
-    private static function sumUntil($occurencesOfReferenceNumber, array $currentSeries, $cursor)
+    private function sumUntil($occurencesOfReferenceNumber, array $currentSeries, $cursor)
     {
         $sum = 0;
         for ($z=0; $z<$occurencesOfReferenceNumber; $z++) {

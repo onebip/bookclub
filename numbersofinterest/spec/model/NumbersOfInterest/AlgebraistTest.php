@@ -1,20 +1,27 @@
 <?php
 namespace NumbersOfInterest;
 
-use NumbersOfInterest\Algebraist;
-use NumbersOfInterest\Options;
-use NumbersOfInterest\SeriesArrayToConsoleLine;
+use UI\Options;
+use UI\SeriesArrayToConsoleLine;
 
-require_once __DIR__ . '/Algebraist.php';
+require_once __DIR__ . '/../../../model/NumbersOfInterest/Algebraist.php';
 
 class AlgebraistTest extends \PHPUnit_Framework_TestCase
 {
+    private $algebraist;
+
+    public function setUp()
+    {
+        $this->algebraist = new Algebraist();    
+        $this->seriesArrayToConsoleLine = new SeriesArrayToConsoleLine();
+    }
+
     public function testNumbersOfInterestAreFound()
     {
         $numberOfSeries = 1;
         $this->assertEquals(
             [[2, 2, 2, 6, 10, 18, 34]],
-            Algebraist::calculate(
+            $this->algebraist->calculate(
                 new Options(
                     "$numberOfSeries" . PHP_EOL . $this->seriesInput()
                 )
@@ -33,7 +40,7 @@ class AlgebraistTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $expectedSeriesOutput,
-            Algebraist::calculate(
+            $this->algebraist->calculate(
                 new Options(
                     $numberOfSeries . PHP_EOL . $this->seriesInput() . PHP_EOL . $this->seriesInput(9, 4, 12)
                 )
@@ -51,8 +58,8 @@ $expectedSeriesOutput = <<<EOT
 EOT;
         $this->assertEquals(
             $expectedSeriesOutput,
-            SeriesArrayToConsoleLine::output(
-                Algebraist::calculate(
+            $this->seriesArrayToConsoleLine->output(
+                $this->algebraist->calculate(
                     new Options(
                         $numberOfSeries . PHP_EOL . $this->seriesInput() . PHP_EOL . $this->seriesInput(9, 4, 12)
                     )
@@ -66,8 +73,8 @@ EOT;
         $numberOfSeries = 1;
         $this->assertEquals(
             '2, 2, 2, 6, 10, 18, 34',
-            SeriesArrayToConsoleLine::output(
-                Algebraist::calculate(
+            $this->seriesArrayToConsoleLine->output(
+                $this->algebraist->calculate(
                     new Options(
                         "$numberOfSeries" . PHP_EOL . $this->seriesInput()
                     )

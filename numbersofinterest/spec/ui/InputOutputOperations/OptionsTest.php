@@ -1,7 +1,6 @@
 <?php
-namespace NumbersOfInterest;
-require_once __DIR__ . '/Options.php';
-use NumbersOfInterest\Options;
+namespace UI;
+require_once __DIR__ . '/../../../ui/InputOutputOperations/Options.php';
 
 class OptionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,7 +49,7 @@ EOT;
         $options = new Options($input);
         $this->assertEquals(
             [[3,2,7],[4,9,10]],
-            $options->toArray() 
+            $options->All() 
         );
     }
 }

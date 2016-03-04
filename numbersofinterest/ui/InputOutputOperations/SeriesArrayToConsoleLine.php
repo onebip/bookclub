@@ -1,9 +1,9 @@
 <?php
-namespace NumbersOfInterest;
+namespace UI;
 
 class SeriesArrayToConsoleLine
 {
-    public static function output(array $series)
+    public function output(array $series)
     {
         return implode(
             PHP_EOL,

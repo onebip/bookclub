@@ -1,7 +1,5 @@
 <?php
-namespace NumbersOfInterest;
-require_once __DIR__ . '/SeriesProperties.php';
-use NumbersOfInterest\SeriesProperties;
+namespace UI;
 
 class Options 
 {
@@ -21,7 +19,7 @@ class Options
         $this->seriesOptions = $raws; 
     }
 
-    public function toArray()
+    public function all()
     {
         $seriesOptionsArray = [];
         foreach ($this->seriesOptions as $serieOption) {
