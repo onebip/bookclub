@@ -49,7 +49,7 @@ EOT;
         $options = new Options($input);
         $this->assertEquals(
             [[3,2,7],[4,9,10]],
-            $options->All() 
+            $options->all() 
         );
     }
 }
