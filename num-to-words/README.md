@@ -1,6 +1,6 @@
 # num-to-words
 
-FIXME: description
+We need to apply this kata http://codingdojo.org/cgi-bin/index.pl?KataNumbersInWords by using T.D.D
 
 ## Installation
 
@@ -10,7 +10,7 @@ Download from http://example.com/FIXME.
 
 FIXME: explanation
 
-    $ java -jar num-to-words-0.1.0-standalone.jar [args]
+    $ lein midje :autotest
 
 ## Options
 
